@@ -56,7 +56,8 @@ Resources:
       VpcId:
         Ref: myVPC
       Tags:
-        - Name: "cfn-rt"
+        - Key: Name
+          Value: "cfn-rt"
 
   myRoute:
     Type: AWS::EC2::Route
