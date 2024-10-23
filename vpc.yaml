@@ -4,8 +4,8 @@ Resources:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: 10.16.0.0/24
-      EnableDnsSupport: "true"
-      EnableDnsHostnames: "true"
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
       Tags:
         - Key: Name
           Value: "jumpbox-vpc"
@@ -15,7 +15,8 @@ Resources:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
-        - Name: "cfn-igw"
+        - Key: Name
+          Value: "cfn-igw"
 
   GatewayToInternet:
     Type: AWS::EC2::VPCGatewayAttachment
