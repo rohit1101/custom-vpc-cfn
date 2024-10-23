@@ -15,8 +15,7 @@ Resources:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
-        - Name:
-          Value: "cfn-igw"
+        - Name: "cfn-igw"
 
   GatewayToInternet:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -56,8 +55,7 @@ Resources:
       VpcId:
         Ref: myVPC
       Tags:
-        - Name:
-          Value: "cfn-rt"
+        - Name: "cfn-rt"
 
   myRoute:
     Type: AWS::EC2::Route
