@@ -73,6 +73,6 @@ Resources:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId:
-        Ref: privateSubnet
+        Ref: pubSubnet
       RouteTableId:
         Ref: myRouteTable
