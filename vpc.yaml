@@ -1,4 +1,5 @@
 Resources:
+  # custom VPC
   myVPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -8,3 +9,70 @@ Resources:
       Tags:
         - Key: Name
           Value: "jumpbox-vpc"
+
+  # Internet Gateway
+  myInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Name:
+          Value: "cfn-igw"
+
+  GatewayToInternet:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: VPC
+      InternetGatewayId:
+        Ref: myInternetGateway
+
+  pubSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "us-east-1a"
+      CidrBlock: "10.16.0.0/25"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "public-subnet"
+      VpcId: "vpc-0a0c0690a8d9185aa"
+
+  privateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: "us-east-1a"
+      CidrBlock: "10.16.0.128/25"
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: "public-subnet"
+      VpcId: "vpc-0a0c0690a8d9185aa"
+
+  # Todo: add NAT gateway
+
+  myRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: myVPC
+      Tags:
+        - Name:
+          Value: "cfn-rt"
+
+  myRoute:
+    Type: AWS::EC2::Route
+    DependsOn: GatewayToInternet
+    Properties:
+      RouteTableId:
+        Ref: myRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: myInternetGateway
+
+  mySubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: privateSubnet
+      RouteTableId:
+        Ref: myRouteTable
