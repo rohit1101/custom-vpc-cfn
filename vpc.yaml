@@ -1,14 +1,20 @@
+Parameters:
+  VpcIdParameter:
+    Type: AWS::EC2::VPC::Id
+    Description: "ID of VPC"
+    Default: "vpc-0b8e86c287287eea5"
+
 Resources:
-  # custom VPC
-  myVPC:
-    Type: AWS::EC2::VPC
-    Properties:
-      CidrBlock: 10.16.0.0/24
-      EnableDnsSupport: true
-      EnableDnsHostnames: true
-      Tags:
-        - Key: Name
-          Value: "jumpbox-vpc"
+  # custom VPC create a VPC first then comment and add parameters to reference the VpcId
+  # myVPC:
+  #   Type: AWS::EC2::VPC
+  #   Properties:
+  #     CidrBlock: 10.16.0.0/24
+  #     EnableDnsSupport: true
+  #     EnableDnsHostnames: true
+  #     Tags:
+  #       - Key: Name
+  #         Value: "jumpbox-vpc"
 
   # Internet Gateway
   myInternetGateway:
@@ -22,7 +28,7 @@ Resources:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       VpcId:
-        Ref: myVPC
+        Ref: VpcIdParameter
       InternetGatewayId:
         Ref: myInternetGateway
 
@@ -35,7 +41,7 @@ Resources:
       Tags:
         - Key: Name
           Value: "public-subnet"
-      VpcId: !Ref myVpc
+      VpcId: "vpc-0b8e86c287287eea5"
 
   privateSubnet:
     Type: AWS::EC2::Subnet
@@ -45,8 +51,8 @@ Resources:
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: "public-subnet"
-      VpcId: !Ref myVpc
+          Value: "private-subnet"
+      VpcId: "vpc-0b8e86c287287eea5"
 
   # Todo: add NAT gateway
 
@@ -54,7 +60,7 @@ Resources:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId:
-        Ref: myVPC
+        Ref: VpcIdParameter
       Tags:
         - Key: Name
           Value: "cfn-rt"
